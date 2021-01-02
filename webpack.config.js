@@ -49,6 +49,12 @@ module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: ['@babel/polyfill', './index.jsx'],
+    resolve: {
+        fallback: {
+            buffer: require.resolve('buffer/'),
+            os: require.resolve('os-browserify/browser'),
+        },
+    },
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist'),

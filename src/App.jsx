@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import { setOnline } from './reducer.js';
-import { runWebsoket, send } from './webSocketClient.js';
+import { runWebsoket, send } from './client.js';
 
 const App = (props) => {
     const inputRef = useRef(null);
@@ -57,7 +57,7 @@ const App = (props) => {
                 <div>
                     <ul>
                     {props.users.map(name => {
-                        return <li>{name}</li>
+                        return <li key={name + Date.now()}>{name}</li>
                     })}
                     </ul>
                 </div>
@@ -78,10 +78,10 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, { setOnline })(App);
 
 const Messages = ({ messages }) => {
-    const message = (text) => <li key={text}>{text}</li>
+    const message = (text) => <li key={text + Date.now()}>{text}</li>
     return (
         <div>
-            <ul></ul>
+            <ul>
             {messages.map((msg) => {
                 switch (msg.type) {
                     case 'REGULAR':
@@ -92,6 +92,7 @@ const Messages = ({ messages }) => {
                         return message(`${msg.name} is disconnected!`);
                 }
             })}
+            </ul>
         </div>
     );
 };

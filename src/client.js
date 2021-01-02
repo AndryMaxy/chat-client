@@ -1,3 +1,4 @@
+import ip from 'ip';
 import { dispatch } from './store';
 import { setOffline } from './reducer';
 
@@ -5,7 +6,9 @@ export let send;
 
 export const runWebsoket = (name) => {
     //const ws = new WebSocket('ws://52.14.207.216:3003');
-    const ws = new WebSocket('ws://localhost:3003');
+    const ipAddress = ip.address('public', 'ipv4');
+    console.log(ipAddress);
+    const ws = new WebSocket(`ws://${ipAddress}:3003`);
 
     ws.onopen = () => {
         send({ type: 'LOGIN', name });
