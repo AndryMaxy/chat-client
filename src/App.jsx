@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { connect } from 'react-redux';
-import { setOnline } from './reducer.js';
-import { runWebsoket, send } from './client.js';
+import { } from './reducer.js';
 
 const App = (props) => {
     const inputRef = useRef(null);
@@ -16,8 +15,12 @@ const App = (props) => {
                     onClick={() => {
                         const name = inputRef.current.value;
                         if (name.length < 3) return;
-                        props.setOnline(name);
-                        runWebsoket(name);
+                        props.send({
+                            type: 'LOGIN', 
+                            info: {
+                                name
+                            }
+                        });
                     }}
                 >
                     Confirm
@@ -45,7 +48,7 @@ const App = (props) => {
                                     text,
                                 },
                             };
-                            send(message);
+                            props.send(message);
                             e.target.value = '';
                         }
                     }}
@@ -75,7 +78,7 @@ const mapStateToProps = (state) => ({
     messages: state.messages,
 });
 
-export default connect(mapStateToProps, { setOnline })(App);
+export default connect(mapStateToProps, {})(App);
 
 const Messages = ({ messages }) => {
     const message = (text) => <li key={text + Date.now()}>{text}</li>

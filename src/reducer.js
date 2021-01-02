@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) => {
 
     switch (action.type) {
         case 'ONLINE':
-            return { ...state, ...action.data };
+            return { ...state, ...action.data, online: true };
         case 'MESSAGE':
             return updateMessages({ type: 'REGULAR' });
         case 'CONNECTED':
@@ -28,6 +28,3 @@ const reducer = (state = initialState, action) => {
 };
 
 export default reducer;
-
-export const setOnline = (name) => ({ type: 'ONLINE', data: { online: true, name } });
-export const setOffline = () => ({ type: 'OFFLINE', data: { online: false } });

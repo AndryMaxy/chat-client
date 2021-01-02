@@ -6,6 +6,7 @@
 //npm i -D style-loader css-loader
 //npm i -D file-loader
 //npm i -D mini-css-extract-plugin
+//npm i -D node-sass sass-loader
 //npm i -D cross-env
 //npm i -D babel-loader @babel/core
 //npm i -D @babel/preset-env
@@ -43,6 +44,20 @@ const babelRule = (test, presets = []) => {
         ],
     };
     return rule;
+};
+
+const getCSSloaders = (loaders = []) => {
+    return [
+        {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+                hmr: isDev,
+                reloadAll: true,
+            },
+        },
+        'css-loader',
+        ...loaders,
+    ];
 };
 
 module.exports = {
@@ -93,34 +108,15 @@ module.exports = {
         rules: [
             babelRule(/\.js$/),
             babelRule(/\.ts$/, ['@babel/preset-typescript']),
-            //babelRule(/\.jsx$/, ['@babel/preset-react']),
-            {
-                test: /\.jsx$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['@babel/preset-env', '@babel/preset-react'],
-                            plugins: ['@babel/plugin-proposal-class-properties'],
-                        },
-                    },
-                    'eslint-loader',
-                ],
-            },
+            babelRule(/\.jsx$/, ['@babel/preset-react']),
             {
                 test: /\.css$/,
                 //use: ["style-loader", "css-loader"],
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            hmr: isDev,
-                            reloadAll: true,
-                        },
-                    },
-                    'css-loader',
-                ],
+                use: getCSSloaders(),
+            },
+            {
+                test: /\.s[ac]ss$/,
+                use: getCSSloaders(['sass-loader']),
             },
             {
                 test: /\.(png|jpg|svg|gif)$/,
