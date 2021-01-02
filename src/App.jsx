@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { connect } from 'react-redux';
-import { } from './reducer.js';
 
 const App = (props) => {
     const inputRef = useRef(null);
