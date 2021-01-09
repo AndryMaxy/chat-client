@@ -46,6 +46,11 @@ const babelRule = (test, presets = []) => {
     return rule;
 };
 
+const getCopyPattern = (from) => ({
+    from: path.resolve(__dirname, from),
+    to: path.resolve(__dirname, 'public'),
+});
+
 const getCSSloaders = (loaders = []) => {
     return [
         {
@@ -63,32 +68,43 @@ const getCSSloaders = (loaders = []) => {
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
-    entry: ['@babel/polyfill', './index.jsx'],
+    entry: {
+        login: ['@babel/polyfill', './login/login.jsx'],
+        chat: ['@babel/polyfill', './chat/chat.jsx'],
+    },
     resolve: {
         fallback: {
             buffer: require.resolve('buffer/'),
             os: require.resolve('os-browserify/browser'),
+            path: require.resolve('path-browserify'),
         },
     },
     output: {
         filename: '[name].[contenthash].js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'public'),
     },
     plugins: [
         new HTMLPlugin({
-            template: './index.html',
+            template: './chat/chat.ejs',
             minify: {
                 collapseWhitespace: isProd,
             },
+            inject: true,
+            chunks: ['chat'],
+            filename: 'chat.ejs',
+        }),
+        new HTMLPlugin({
+            template: './login/login.ejs',
+            minify: {
+                collapseWhitespace: isProd,
+            },
+            inject: true,
+            chunks: ['login'],
+            filename: 'login.ejs',
         }),
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: path.resolve(__dirname, 'src/favicon.ico'),
-                    to: path.resolve(__dirname, 'dist'),
-                },
-            ],
+            patterns: [getCopyPattern('src/favicon.ico'), getCopyPattern('src/msg.mp3')],
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',

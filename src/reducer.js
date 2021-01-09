@@ -1,3 +1,5 @@
+import path from 'path';
+
 const initialState = {
     name: '',
     online: false,
@@ -6,24 +8,28 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-    const updateMessages = (params = {}) => {
-        const messages = [...state.messages];
-        const { name, text, users } = action.data;
-        messages.push({ ...params, name, text });
-        return { ...state, users: users || state.users, messages };
-    };
+    if (state.online) {
+        switch (action.type) {
+            case 'MESSAGES':
+                soundMessage();
+                return { ...state, messages: action.info.messages };
+            default:
+                return state;
+        }
+    } else {
+        switch (action.type) {
+            case 'ONLINE':
+                return { ...state, ...action.info, online: true };
+            default:
+                return state;
+        }
+    }
+};
 
-    switch (action.type) {
-        case 'ONLINE':
-            return { ...state, ...action.data, online: true };
-        case 'MESSAGE':
-            return updateMessages({ type: 'REGULAR' });
-        case 'CONNECTED':
-            return updateMessages({ type: 'CONNECTED' });
-        case 'DISCONNECTED':
-            return updateMessages({ type: 'DISCONNECTED' });
-        default:
-            return state;
+const soundMessage = () => {
+    if (document.visibilityState === 'hidden') {
+        const dirname = path.dirname(import.meta.url);
+        new Audio(path.resolve(dirname, '/msg.mp3')).play();
     }
 };
 

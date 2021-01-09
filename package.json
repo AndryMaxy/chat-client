@@ -2,12 +2,14 @@
   "name": "chat-client",
   "version": "1.0.0",
   "description": "my chat",
-  "main": "index.jsx",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack --mode development",
-    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "build:dev": "cross-env NODE_ENV=development webpack --mode development",
+    "build:prod": "cross-env NODE_ENV=production webpack --mode production",
     "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
-    "start": "cross-env NODE_ENV=development webpack serve --mode development --open"
+    "dev:client": "cross-env NODE_ENV=development webpack serve --mode development --open",
+    "dev:server": "nodemon bootstrap.js localhost 4300",
+    "server": "node bootstrap.js",
+    "dev": "npm run dev:client && npm run dev:server"
   },
   "repository": {
     "type": "git",
@@ -50,14 +52,21 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "axios": "^0.21.1",
     "buffer": "^6.0.3",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "ip": "^1.1.5",
     "jquery": "^3.5.1",
+    "mongoose": "^5.11.10",
     "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "ws": "^7.4.2",
     "ws-heartbeat": "^1.2.0"
   }
