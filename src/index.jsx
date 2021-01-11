@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Login from './Component.jsx';
+import App from './components/App.jsx';
 
 const rootElement = document.getElementById('root');
-ReactDOM.render(<Login />, rootElement);
+ReactDOM.render(<App />, rootElement);

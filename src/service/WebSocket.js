@@ -1,5 +1,4 @@
-import ip from 'ip';
-import { setOffline, setMessage } from './Actions';
+import { setOffline, setMessage } from '../redux/actions';
 
 export const runWebsoket = () => {
     //const ipAddress = ip.address('public', 'ipv4');
@@ -12,7 +11,7 @@ export const runWebsoket = () => {
     ws.onmessage = async (response) => {
         const message = JSON.parse(response.data);
         const { type, info } = message;
-        setMessage({ type, info });
+        //setMessage({ type, info });
     };
 
     const interval = setInterval(() => {
@@ -20,9 +19,9 @@ export const runWebsoket = () => {
     }, 30000);
 
     ws.onclose = () => {
-        setOffline();
+        //setOffline();
         clearInterval(interval);
     };
 
-    return send;
+    return ws;
 };

@@ -46,11 +46,6 @@ const babelRule = (test, presets = []) => {
     return rule;
 };
 
-const getCopyPattern = (from) => ({
-    from: path.resolve(__dirname, from),
-    to: path.resolve(__dirname, 'public'),
-});
-
 const getCSSloaders = (loaders = []) => {
     return [
         {
@@ -68,10 +63,7 @@ const getCSSloaders = (loaders = []) => {
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
-    entry: {
-        login: ['@babel/polyfill', './login/login.jsx'],
-        chat: ['@babel/polyfill', './chat/chat.jsx'],
-    },
+    entry: ['@babel/polyfill', './index.jsx'],
     resolve: {
         fallback: {
             buffer: require.resolve('buffer/'),
@@ -85,26 +77,19 @@ module.exports = {
     },
     plugins: [
         new HTMLPlugin({
-            template: './chat/chat.ejs',
+            template: './index.html',
             minify: {
                 collapseWhitespace: isProd,
             },
-            inject: true,
-            chunks: ['chat'],
-            filename: 'chat.ejs',
-        }),
-        new HTMLPlugin({
-            template: './login/login.ejs',
-            minify: {
-                collapseWhitespace: isProd,
-            },
-            inject: true,
-            chunks: ['login'],
-            filename: 'login.ejs',
         }),
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin({
-            patterns: [getCopyPattern('src/favicon.ico'), getCopyPattern('src/msg.mp3')],
+            patterns: [
+                {
+                    from: path.resolve(__dirname, 'src/assets'),
+                    to: path.resolve(__dirname, 'public/assets'),
+                },
+            ],
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
